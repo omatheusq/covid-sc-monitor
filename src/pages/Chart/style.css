@@ -1,0 +1,52 @@
+html,body,#root{
+  height: 100% !important;
+}
+
+.container{
+  display: flex;
+  height: 100%;
+}
+
+.chart-container{
+  background-color: #E6ECF3;
+  width: 70%;
+  height: 100%;
+}
+
+.details-container{
+  width: 30%;
+  height: 100%;
+}
+
+.details{
+  padding: 0px 20px;
+}
+
+.details .title{
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #7d7d7d;
+}
+
+
+.summary-item{
+  border-bottom: 1px solid #dedddd;
+  border-top: 1px solid #dedddd;
+  padding: 20px 0;
+  display: flex;
+}
+
+.summary-item .description{
+  width: 80%;
+}
+
+.summary-item .value{
+  width: 20%;
+  font-size: 1.38em;
+  margin-bottom: -4px;
+  margin-top: -4px;
+}
+
+.summary-item:first-of-type{
+  border-bottom: none;
+}

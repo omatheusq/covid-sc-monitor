@@ -1,0 +1,15 @@
+.city{
+  fill: white;
+  stroke: #9a9a9a;
+  stroke-width: 1;
+}
+.city-selected{
+  fill:  #afe0f8;
+  stroke: #4DA4CE;
+  cursor: pointer;
+}
+
+#map{
+  width: 100%;
+  height: 100%;
+}
