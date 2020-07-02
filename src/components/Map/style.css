@@ -3,13 +3,20 @@
   stroke: #9a9a9a;
   stroke-width: 1;
 }
-.city-selected{
+
+
+.city-hovered{
   fill:  #afe0f8;
   stroke: #4DA4CE;
-  cursor: pointer;
+}
+
+.city-selected{
+  fill:  #4DA4CE;
+  stroke: #4DA4CE;
 }
 
 #map{
   width: 100%;
   height: 100%;
+  cursor: pointer;
 }

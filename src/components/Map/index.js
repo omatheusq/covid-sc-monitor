@@ -11,7 +11,15 @@ import './style.css'
 
 export default function Map() {
 
+  const [selectedCity, setSelectedCity] = useState('');
+
   const margin = { top: 50, left: 50, right: 50, bottom: 50 };
+
+  useEffect(() => {
+
+    console.log(selectedCity)
+    
+  }, [selectedCity]);
 
   useLayoutEffect(() => {
     function updateSize() {
@@ -27,8 +35,7 @@ export default function Map() {
   }, []);
 
   let resizeMap = (divWidth, divHeight) => {
-    let height = divHeight - margin.top - margin.bottom,
-      width = divWidth - margin.left - margin.right;
+    let width = divWidth - margin.left - margin.right;
 
     d3.select("g").attr("transform", "scale(" + width / 900 + ")");
   }
@@ -62,13 +69,18 @@ export default function Map() {
       .attr('class', 'city')
       .attr('d', path)
       .on('mouseover', function () {
-        d3.select(this).classed('city-selected', true)
+        d3.select(this).classed('city-hovered', true)
       }).on('mouseout', function () {
-        d3.select(this).classed('city-selected', false)
+        d3.select(this).classed('city-hovered', false)
       })
       .on('click', function (d) {
         let city = citiesCodinates.find(c => c.ibgeCode === d.properties.cod)
-        console.log(city)
+        setSelectedCity(city)
+        let selecteds = d3.select('#map').selectAll('.city.city-selected')
+        selecteds.nodes().forEach((s) => {
+          d3.select(s).classed('city-selected', false)
+        })
+        d3.select(this).classed('city-selected', true)
       })
 
     /**svg.selectAll('.city-circle')
