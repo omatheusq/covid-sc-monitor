@@ -7,7 +7,7 @@ export default function Routes() {
   return (
     <BrowserRouter>
       <Switch>
-        <Route path="/" component={Chart} exact/>
+        <Route path="/" component={Chart}/>
       </Switch>
     </BrowserRouter>
   );

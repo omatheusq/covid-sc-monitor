@@ -1,5 +1,4 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom'
 
 import * as d3 from 'd3'
 import * as topojson from "topojson-client";
@@ -7,11 +6,11 @@ import * as topojson from "topojson-client";
 import citiesCordinates from '../../data/cities-codinates.json';
 import mapTopology from '../../data/map.json';
 
-import api from '../../services/api'
+
 
 import './style.css'
 
-console.log(api.getData())
+
 
 export default function Map() {
 
@@ -36,7 +35,7 @@ export default function Map() {
     window.addEventListener('resize', updateSize);
     updateSize();
     return () => window.removeEventListener('resize', updateSize);
-  }, []);
+  });
 
   let resizeMap = (divWidth, divHeight) => {
     let width = divWidth - margin.left - margin.right;
@@ -109,7 +108,7 @@ export default function Map() {
       mapTopology,
       citiesCordinates
     )
-  }, []);
+  });
 
   return (
     <div id="map"></div>
