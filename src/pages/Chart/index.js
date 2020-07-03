@@ -21,7 +21,7 @@ export default function Chart() {
               <div className="description">
                 Casos confirmados:
               </div>
-              <div className="value">
+              <div className="value"> 
                 999
               </div>
             </div>

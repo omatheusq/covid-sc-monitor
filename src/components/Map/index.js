@@ -7,7 +7,11 @@ import * as topojson from "topojson-client";
 import citiesCordinates from '../../data/cities-codinates.json';
 import mapTopology from '../../data/map.json';
 
+import api from '../../services/api'
+
 import './style.css'
+
+console.log(api.getData())
 
 export default function Map() {
 
