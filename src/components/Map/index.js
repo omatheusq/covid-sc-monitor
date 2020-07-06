@@ -21,7 +21,7 @@ export default function Map() {
   useEffect(() => {
 
     console.log(selectedCity)
-    
+
   }, [selectedCity]);
 
   useLayoutEffect(() => {
@@ -35,7 +35,16 @@ export default function Map() {
     window.addEventListener('resize', updateSize);
     updateSize();
     return () => window.removeEventListener('resize', updateSize);
-  });
+  }, []);
+
+  useEffect(() => {
+    createMap(
+      document.getElementById('map').clientWidth,
+      document.getElementById('map').clientHeight,
+      mapTopology,
+      citiesCordinates
+    )
+  }, []);
 
   let resizeMap = (divWidth, divHeight) => {
     let width = divWidth - margin.left - margin.right;
@@ -101,14 +110,7 @@ export default function Map() {
       **/
   }
 
-  useEffect(() => {
-    createMap(
-      document.getElementById('map').clientWidth,
-      document.getElementById('map').clientHeight,
-      mapTopology,
-      citiesCordinates
-    )
-  });
+
 
   return (
     <div id="map"></div>
