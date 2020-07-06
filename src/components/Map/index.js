@@ -8,19 +8,27 @@ import mapTopology from '../../data/map.json';
 
 
 
+import { useDispatch } from "react-redux";
+
+
 import './style.css'
 
 
 
 export default function Map() {
 
+  const dispatch = useDispatch();
+
   const [selectedCity, setSelectedCity] = useState('');
 
   const margin = { top: 50, left: 50, right: 50, bottom: 50 };
 
   useEffect(() => {
+    dispatch({
+      type: "SELECT_CITY",
+      payload: selectedCity
+    })
 
-    console.log(selectedCity)
 
   }, [selectedCity]);
 
