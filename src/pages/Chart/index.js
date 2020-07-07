@@ -1,20 +1,20 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 
 import Map from '../../components/Map'
 
 import './style.css'
 
-import { useSelector } from "react-redux";
+
+import { store } from "../../stores/rootStore.js";
 
 export default function Chart() {
 
-  const data = useSelector(state => {
-    return state;
-  });
+  const [selectedCity, setSelectedCity] = useState('');
 
-  useEffect(() => {
-
-  }, [data]);
+  store.subscribe(()=> {
+    setSelectedCity(store.getState())
+  })
+  
 
   return (
     <div className="container">
@@ -24,7 +24,7 @@ export default function Chart() {
       <div className="details-container">
         <div className="details">
           <p className="title">
-            {data.city}
+            {selectedCity.city || 'Santa Catarina'}
           </p>
           <div className="summary">
             <div className="summary-item">

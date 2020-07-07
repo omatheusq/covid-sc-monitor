@@ -6,18 +6,13 @@ import * as topojson from "topojson-client";
 import citiesCordinates from '../../data/cities-codinates.json';
 import mapTopology from '../../data/map.json';
 
-
-
 import { useDispatch } from "react-redux";
-
 
 import './style.css'
 
-
-
 export default function Map() {
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   const [selectedCity, setSelectedCity] = useState('');
 
@@ -25,8 +20,8 @@ export default function Map() {
 
   useEffect(() => {
     dispatch({
-      type: "SELECT_CITY",
-      payload: selectedCity
+      type: "SET_CITY",
+      city: selectedCity
     })
 
 
