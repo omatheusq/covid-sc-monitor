@@ -1,19 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 import Map from '../../components/Map'
+import { store } from "../../stores/rootStore.js";
 
 import './style.css'
 
 
-import { store } from "../../stores/rootStore.js";
-
 export default function Chart() {
 
   const [selectedCity, setSelectedCity] = useState('');
+  const [covidData, setcovidData] = useState('');
 
   store.subscribe(()=> {
     setSelectedCity(store.getState())
   })
+
+
+  useEffect(()=> {
+    axios.get(`https://covid-sc-monitor-backend.herokuapp.com/city/${selectedCity.ibgeCode}`)
+      .then(res => {
+        console.log(res.data)
+    })
+  }, [selectedCity])
   
 
   return (
