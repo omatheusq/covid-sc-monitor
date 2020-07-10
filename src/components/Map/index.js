@@ -2,21 +2,27 @@ import React, { useEffect, useLayoutEffect, useState } from 'react';
 
 import * as d3 from 'd3'
 import * as topojson from "topojson-client";
+import { useDispatch, useSelector } from "react-redux";
+import api from '../../services/api'
 
-import citiesCordinates from '../../data/cities-codinates.json';
 import mapTopology from '../../data/map.json';
-
-import { useDispatch } from "react-redux";
-
 import './style.css'
+
 
 export default function Map() {
 
-  const dispatch = useDispatch()
-
+  const margin = { top: 50, left: 50, right: 50, bottom: 50 };
   const [selectedCity, setSelectedCity] = useState('');
 
-  const margin = { top: 50, left: 50, right: 50, bottom: 50 };
+  const dispatch = useDispatch()
+  const { citiesCoordinates } = useSelector(state => ({ ...state.coordinatesReducer }))
+
+  useEffect(() => {
+    api.get(`/city`)
+    .then(res => {
+      console.warn(citiesCoordinates)
+    })  
+  }, []);
 
   useEffect(() => {
     dispatch({
@@ -24,8 +30,8 @@ export default function Map() {
       city: selectedCity
     })
 
-
   }, [selectedCity]);
+
 
   useLayoutEffect(() => {
     function updateSize() {
@@ -45,7 +51,7 @@ export default function Map() {
       document.getElementById('map').clientWidth,
       document.getElementById('map').clientHeight,
       mapTopology,
-      citiesCordinates
+      citiesCoordinates
     )
   }, []);
 
@@ -90,6 +96,7 @@ export default function Map() {
       })
       .on('click', function (d) {
         let city = citiesCodinates.find(c => c.ibgeCode === d.properties.cod)
+        console.log(citiesCodinates)
         setSelectedCity(city)
         let selecteds = d3.select('#map').selectAll('.city.city-selected')
         selecteds.nodes().forEach((s) => {

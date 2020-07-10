@@ -7,12 +7,12 @@
 
 .city-hovered{
   fill:  #afe0f8;
-  stroke: #4DA4CE;
+  stroke: #9a9a9a;
 }
 
 .city-selected{
-  fill:  #4DA4CE;
-  stroke: #4DA4CE;
+  fill: #63acd0d6;
+  stroke: #9a9a9a;
 }
 
 #map{

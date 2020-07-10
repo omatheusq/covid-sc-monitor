@@ -1,26 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useSelector } from 'react-redux';
+import api from '../../services/api'
 
 import Map from '../../components/Map'
-import { store } from "../../stores/rootStore.js";
 
 import './style.css'
 
 
 export default function Chart() {
 
-  const [selectedCity, setSelectedCity] = useState('');
-  const [covidData, setcovidData] = useState('');
+  const [covidData, setCovidData] = useState('');
 
-  store.subscribe(()=> {
-    setSelectedCity(store.getState())
-  })
-
+  const { selectedCity } = useSelector(state => ({ ...state.selectedCityReducer }))
 
   useEffect(()=> {
-    axios.get(`https://covid-sc-monitor-backend.herokuapp.com/city/${selectedCity.ibgeCode}`)
+    api.get(`/city/${selectedCity.ibgeCode}`)
       .then(res => {
-        console.log(res.data)
+        setCovidData(res.data)
     })
   }, [selectedCity])
   
@@ -41,7 +37,7 @@ export default function Chart() {
                 Casos confirmados:
               </div>
               <div className="value">
-                999
+                {covidData.caseCount}
               </div>
             </div>
             <div className="summary-item">
@@ -49,7 +45,7 @@ export default function Chart() {
                 Obitos:
               </div>
               <div className="value">
-                10
+              {covidData.deathCount}
               </div>
             </div>
           </div>
