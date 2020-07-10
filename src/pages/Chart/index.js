@@ -13,13 +13,16 @@ export default function Chart() {
 
   const { selectedCity } = useSelector(state => ({ ...state.selectedCityReducer }))
 
-  useEffect(()=> {
+  const numberFormat = (value) => (parseInt(value) || 0).toLocaleString(undefined, {maximumFractionDigits:2}) ;
+
+
+  useEffect(() => {
     api.get(`/city/${selectedCity.ibgeCode}`)
       .then(res => {
         setCovidData(res.data)
-    })
+      })
   }, [selectedCity])
-  
+
 
   return (
     <div className="container">
@@ -37,7 +40,7 @@ export default function Chart() {
                 Casos confirmados:
               </div>
               <div className="value">
-                {covidData.caseCount}
+                {numberFormat(covidData.caseCount)}
               </div>
             </div>
             <div className="summary-item">
@@ -45,7 +48,7 @@ export default function Chart() {
                 Obitos:
               </div>
               <div className="value">
-              {covidData.deathCount}
+                {numberFormat(covidData.deathCount)}
               </div>
             </div>
           </div>

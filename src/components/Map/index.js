@@ -11,17 +11,20 @@ import './style.css'
 
 export default function Map() {
 
+  const radiusScale = d3.scaleSqrt();
+
   const margin = { top: 50, left: 50, right: 50, bottom: 50 };
   const [selectedCity, setSelectedCity] = useState('');
+  const [covidData, setcovidData] = useState([]);
 
   const dispatch = useDispatch()
   const { citiesCoordinates } = useSelector(state => ({ ...state.coordinatesReducer }))
 
   useEffect(() => {
     api.get(`/city`)
-    .then(res => {
-      console.warn(citiesCoordinates)
-    })  
+      .then(res => {
+        setcovidData(res.data)
+      })
   }, []);
 
   useEffect(() => {
@@ -31,6 +34,42 @@ export default function Map() {
     })
 
   }, [selectedCity]);
+
+
+  useEffect(() => {
+    let maxValue = d3.max(covidData.filter(d => d.cityIbgeCode != '42').map(d => parseFloat(d.caseCount)))
+
+    if (isNaN(maxValue) === false) {
+
+      citiesCoordinates.forEach(c => {
+        let data = covidData.find(d => d.cityIbgeCode == c.ibgeCode)
+        if (data) {
+          c.caseCount = parseInt(data.caseCount);
+          c.deathCount = parseInt(data.deathCount);
+        } else {
+          c.caseCount = 0;
+          c.deathCount = 0;
+        }
+      })
+
+      dispatch({
+        type: "DESELECT_CITY"
+      })
+
+      radiusScale
+        .domain([0, maxValue])
+        .range([0, 30]);
+
+      createMap(
+        document.getElementById('map').clientWidth,
+        document.getElementById('map').clientHeight,
+        mapTopology,
+        citiesCoordinates
+      )
+    }
+
+
+  }, [covidData]);
 
 
   useLayoutEffect(() => {
@@ -44,15 +83,6 @@ export default function Map() {
     window.addEventListener('resize', updateSize);
     updateSize();
     return () => window.removeEventListener('resize', updateSize);
-  }, []);
-
-  useEffect(() => {
-    createMap(
-      document.getElementById('map').clientWidth,
-      document.getElementById('map').clientHeight,
-      mapTopology,
-      citiesCoordinates
-    )
   }, []);
 
   let resizeMap = (divWidth, divHeight) => {
@@ -96,7 +126,6 @@ export default function Map() {
       })
       .on('click', function (d) {
         let city = citiesCodinates.find(c => c.ibgeCode === d.properties.cod)
-        console.log(citiesCodinates)
         setSelectedCity(city)
         let selecteds = d3.select('#map').selectAll('.city.city-selected')
         selecteds.nodes().forEach((s) => {
@@ -105,22 +134,25 @@ export default function Map() {
         d3.select(this).classed('city-selected', true)
       })
 
-    /**svg.selectAll('.city-circle')
+    svg.selectAll('.city-circle')
       .data(citiesCodinates)
       .enter().append("circle")
-      .attr("r", 4)
-      .attr("cx", function(c){
+      .attr('class', 'circle')
+      .attr("cx", function (c) {
         var coords = projection([c.latLng.lng, c.latLng.lat]);
         return coords[0]
       })
-      .attr("cy", function(c){
+      .attr("cy", function (c) {
         var coords = projection([c.latLng.lng, c.latLng.lat]);
         return coords[1]
       })
-      **/
+      .attr("r", d => { return radiusScale(d.caseCount) })
+      .on('click', function (d) {
+        let city = citiesCodinates.find(c => c.ibgeCode === d.ibgeCode)
+        setSelectedCity(city)
+      })
+
   }
-
-
 
   return (
     <div id="map"></div>
