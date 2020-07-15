@@ -50,3 +50,9 @@ html,body,#root{
 .summary-item:first-of-type{
   border-bottom: none;
 }
+
+.chart-title{
+  text-align: center;
+    margin-top: 20px;
+    margin-bottom: 15px;
+}
