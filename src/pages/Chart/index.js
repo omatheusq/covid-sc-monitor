@@ -55,9 +55,17 @@ export default function Chart() {
 
   return (
     <div className="container">
-      <div className="chart-container">
-        <Map />
+      <div className="map-container-wrapper">
+        <div className="test">
+          <div>
+            <input type="search" name="search" id="search"/>
+          </div>
+        </div>
+        <div className="chart-container">
+          <Map />
+        </div>
       </div>
+
       <div className="details-container">
         <div className="details">
           <p className="title">
