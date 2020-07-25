@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+
 import { Line } from 'react-chartjs-2';
+import { MdSearch, MdClear, MdChevronLeft } from "react-icons/md";
+import moment from 'moment';
 
 import api from '../../services/api'
 
@@ -10,7 +13,7 @@ import './style.css'
 
 
 export default function Chart() {
-
+  const dispatch = useDispatch()
   const [covidData, setCovidData] = useState('');
   const [historicalCaseData, setHistoricalCaseData] = useState('');
 
@@ -18,6 +21,32 @@ export default function Chart() {
 
   const numberFormat = (value) => (parseInt(value) || 0).toLocaleString(undefined, { maximumFractionDigits: 2 });
 
+  const renderTest = (canvas) => {
+    const height = 192, width = 384;
+
+    const ctx = canvas.getContext("2d");
+    const gradient = ctx.createLinearGradient(0, 0, 0, height);
+    gradient.addColorStop(0, 'rgba(250,174,50,1)');
+    gradient.addColorStop(1, 'rgba(250,174,50,0)');
+
+    let res = historicalCaseData
+    if (res) {
+      res.datasets = res.datasets.map(d => ({
+        backgroundColor: gradient, 
+        borderColor: "#ff6c23",
+        borderWidth: 2,
+        pointColor: "#fff",
+        pointStrokeColor: "#ff6c23",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "#ff6c23",
+        data: d.data,
+        label: 'Casos'
+      }))
+
+      setHistoricalCaseData(res)
+    }
+    return historicalCaseData;
+  }
 
   useEffect(() => {
     api.get(`/city/${selectedCity.ibgeCode}`)
@@ -44,8 +73,6 @@ export default function Chart() {
         {
           data: caseDataset,
           label: "Casos",
-          borderColor: "#3e95cd",
-          fill: false
         }
       ]
     }
@@ -53,13 +80,30 @@ export default function Chart() {
     setHistoricalCaseData(config)
   }
 
+
+  const handleDeselectCity = ()=> {
+    dispatch({
+      type: "DESELECT_CITY"
+    })
+  }
+
+  const hasCitySelected = ()=> {
+    return selectedCity && selectedCity.ibgeCode !== 42;
+  }
+
   return (
     <div className="container">
       <div className="map-container-wrapper">
         <div className="test">
-          <div>
-            <input type="search" name="search" id="search"/>
-          </div>
+          <form className="input-container">
+            <span className="input-icon">
+              <MdSearch />
+            </span>
+            <input autocomplete="off" placeholder="Pesquisar" type="text" name="search" id="search" />
+            <span className="input-icon">
+              <MdClear />
+            </span>
+          </form>
         </div>
         <div className="chart-container">
           <Map />
@@ -68,6 +112,13 @@ export default function Chart() {
 
       <div className="details-container">
         <div className="details">
+          
+          {hasCitySelected() && (
+            <button className="back-to-state" onClick={handleDeselectCity}>
+              <MdChevronLeft />
+            </button>
+          )}
+          
           <p className="title">
             {selectedCity.city || 'Santa Catarina'}
           </p>
@@ -93,16 +144,23 @@ export default function Chart() {
                 Casos:
               </div>
               <Line
-                data={historicalCaseData}
+                data={renderTest}
                 options={{
                   legend: {
                     display: false
                   },
+                  responsive: true,
                   scales: {
                     xAxes: [{
-                      display: false //this will remove all the x-axis grid lines
+                      ticks: {
+                        callback: value => {
+                          let m = new moment(value, "YYYY-MM-DD");
+                          return `${m.format('DD')}/${m.format('MM')}`
+                        }
+                      }
                     }]
                   }
+                  
                 }}
                 redraw={true} />
             </div>
