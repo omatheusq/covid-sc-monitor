@@ -1,5 +1,4 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
-
 import * as d3 from 'd3'
 import * as topojson from "topojson-client";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,11 +7,9 @@ import api from '../../services/api'
 import mapTopology from '../../data/map.json';
 import './style.css'
 
-
 export default function Map() {
 
   const radiusScale = d3.scaleSqrt();
-
   const margin = { top: 50, left: 50, right: 50, bottom: 50 };
   const [selectedCity, setSelectedCity] = useState('');
   const [covidData, setcovidData] = useState([]);
@@ -35,12 +32,9 @@ export default function Map() {
 
   }, [selectedCity]);
 
-
   useEffect(() => {
     let maxValue = d3.max(covidData.filter(d => d.cityIbgeCode != '42').map(d => parseFloat(d.caseCount)))
-
     if (isNaN(maxValue) === false) {
-
       citiesCoordinates.forEach(c => {
         let data = covidData.find(d => d.cityIbgeCode == c.ibgeCode)
         if (data) {
@@ -67,10 +61,7 @@ export default function Map() {
         citiesCoordinates
       )
     }
-
-
   }, [covidData]);
-
 
   useLayoutEffect(() => {
     function updateSize() {
@@ -103,6 +94,18 @@ export default function Map() {
       .append('g')
       .attr('transform', `translate(${margin.left}, ${margin.right})`);
 
+    let defs = svg.append("defs");
+    var stripes = defs.append("pattern")
+      .attr("id", "stripes")
+      .attr("width", 8)
+      .attr("height", 10)
+      .attr("patternUnits", "userSpaceOnUse")
+      .attr("patternTransform", "rotate(45 50 50)")
+
+    stripes.append("line")
+      .attr("stroke", "rgb(219, 217, 217)")
+      .attr("stroke-width", 5)
+      .attr("y2", 20);
 
     let projection = d3.geoMercator()
       .center([-50.80, -27.61])
@@ -117,10 +120,12 @@ export default function Map() {
     svg.selectAll('.city')
       .data(cities)
       .enter().append('path')
+
       .attr('class', 'city')
       .attr('d', path)
       .on('mouseover', function () {
         d3.select(this).classed('city-hovered', true)
+
       }).on('mouseout', function () {
         d3.select(this).classed('city-hovered', false)
       })
@@ -151,7 +156,6 @@ export default function Map() {
         let city = citiesCodinates.find(c => c.ibgeCode === d.ibgeCode)
         setSelectedCity(city)
       })
-
   }
 
   return (

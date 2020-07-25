@@ -12,7 +12,7 @@
 }
 
 .city-selected{
-  fill: #63acd0d6;
+  fill: url(#stripes);
   stroke: #9a9a9a;
 }
 
