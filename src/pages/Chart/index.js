@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { MdSearch, MdClear, MdChevronLeft } from "react-icons/md";
+import { MdChevronLeft } from "react-icons/md";
 
 import api from '../../services/api'
 import Map from '../../components/Map'
 import HistoricalDataChart from '../../components/HistoricalDataChart'
+import SearchBar from '../../components/SearchBar'
 
 import './style.css'
 
@@ -42,15 +43,7 @@ export default function Chart() {
     <div className="container">
       <div className="map-container-wrapper">
         <div className="test">
-          <form className="input-container">
-            <span className="input-icon">
-              <MdSearch />
-            </span>
-            <input placeholder="Pesquisar" type="text" name="search" id="search" autoComplete="off"/>
-            <span className="input-icon">
-              <MdClear />
-            </span>
-          </form>
+          <SearchBar />
         </div>
         <div className="chart-container">
           <Map />

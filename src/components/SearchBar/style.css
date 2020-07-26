@@ -1,0 +1,67 @@
+
+.input-container{
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  margin: 10px auto;
+  background-color: white;
+  border: solid 1px #D0CFCE;
+  color: #696565 !important;
+  transition: border-color 150ms ease-in;
+  width: 412px;
+}
+
+.input-container:focus-within{
+  border-color: #3c83b6;
+}
+
+.input-container input{
+  background: transparent;
+  font: normal 16px Google Sans,Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+  -webkit-font-variant-ligatures: none;
+  font-variant-ligatures: none;
+  border: none;
+  height: 40px;
+  width: 320px;
+  margin: 0;
+  color: #696565 !important;
+}
+
+.input-container input:focus{
+  outline: none;
+}
+
+
+.input-icon{
+  font-size: 2rem;
+  width: auto;
+  height: auto;
+  display: flex;
+  padding: 0 14px 0 5px;
+}
+
+.input-icon:last-of-type{
+  padding-right: 0;
+}
+
+.recomendation-container{
+  position: absolute;
+  background-color: white;
+  margin-top: -10px;
+  width: 422px;
+  margin-left: 0px;
+  border: solid 1px #c5c5c5;
+  border-top: none;
+}
+
+.recomendation-container .recomendation-item{
+  font-size: 1.15rem;
+  padding: 12px 20px;
+  border-bottom: solid 1px #e0d8d8;
+}
+
+.recomendation-container .recomendation-item:hover{
+  cursor: pointer;
+  background-color: #ececec;
+  color: black;
+}

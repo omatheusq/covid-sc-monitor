@@ -80,50 +80,6 @@ html,body,#root{
   height: 100%;
 }
 
-.input-container{
-  padding: 5px;
-  display: flex;
-  align-items: center;
-  margin: 10px auto;
-  background-color: white;
-  border: solid 1px #D0CFCE;
-  color: #696565 !important;
-  transition: border-color 150ms ease-in;
-}
-
-.input-container:focus-within{
-  border-color: #3c83b6;
-}
-
-.input-container input{
-  background: transparent;
-  font: normal 16px Google Sans,Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
-  -webkit-font-variant-ligatures: none;
-  font-variant-ligatures: none;
-  border: none;
-  height: 40px;
-  width: 320px;
-  margin: 0;
-  color: #696565 !important;
-}
-
-.input-container input:focus{
-  outline: none;
-}
-
-
-.input-icon{
-  font-size: 2rem;
-  width: auto;
-  height: auto;
-  display: flex;
-  padding: 0 14px 0 5px;
-}
-
-.input-icon:last-of-type{
-  padding-right: 0;
-}
-
 .back-to-state{
   position: absolute;
   height: 65px;
