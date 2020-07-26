@@ -82,33 +82,33 @@ function SearchBar() {
   }, [selectedCity])
 
   useEffect(() => {
-    if(selectedCity && rootCity){
-      if(selectedCity.ibgeCode !== rootCity.ibgeCode){
-        if(rootCity.ibgeCode !== 42){
+    if (selectedCity && rootCity) {
+      if (selectedCity.ibgeCode !== rootCity.ibgeCode) {
+        if (rootCity.ibgeCode !== 42) {
           setCleanButtonShown(true)
           setSelectedCity(rootCity)
-        }else{
+        } else {
           setSearchText('')
           setSelectedCity(undefined)
         }
       }
-    }else if(rootCity){
-        if(rootCity.ibgeCode !== 42){
-          setCleanButtonShown(true)
-          setSelectedCity(rootCity)
-        }
+    } else if (rootCity) {
+      if (rootCity.ibgeCode !== 42) {
+        setCleanButtonShown(true)
+        setSelectedCity(rootCity)
+      }
     }
   }, [rootCity])
 
-  const selectedIfHasJustOneRecomendation = ()=> {
-    if(recomendations.length === 1){
+  const selectedIfHasJustOneRecomendation = () => {
+    if (recomendations.length === 1) {
       setSelectedCity(recomendations[0])
     }
   }
 
   return (
     <div ref={ref}>
-      <form className="input-container test423" onSubmit={(e)=>{e.preventDefault(); selectedIfHasJustOneRecomendation()}}>
+      <form className="input-container test423" onSubmit={(e) => { e.preventDefault(); selectedIfHasJustOneRecomendation() }}>
         <span className="input-icon">
           <MdSearch />
         </span>
@@ -118,12 +118,13 @@ function SearchBar() {
             ? (
               <input
                 onChange={(e) => setSearchText(e.target.value)}
-                onFocus={(e) => setRecomendationsShown(true)}
+                onFocus={() => setRecomendationsShown(true)}
                 placeholder="Pesquisar cidade"
                 type="text"
                 name="search"
                 id="search"
                 value={searchText}
+                tabIndex="1"
                 autoComplete="off" />
             )
             : (
@@ -144,11 +145,24 @@ function SearchBar() {
       {recomendationsShown && (
         <div className="recomendation-container">
           {
-            recomendations.map(c => (
+            recomendations.map((c, index) => (
               <div
                 className="recomendation-item"
+                tabIndex={index + 1}
                 key={c.ibgeCode}
                 onClick={() => setSelectedCity(c)}
+                onKeyDown={(e) => {
+                  const isTabCode = e.keyCode === 9;
+                  const isEnterCode = e.keyCode === 13;
+                  console.log(e.keyCode)
+                  let isLast = index === recomendations.length - 1;
+                  if (isTabCode && isLast) {
+                    document.getElementById("search").focus()
+                    e.preventDefault()
+                  }else if(isEnterCode){
+                    setSelectedCity(c)
+                  }
+                }}
               >
                 {c.city}
               </div>

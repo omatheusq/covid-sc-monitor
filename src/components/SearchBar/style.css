@@ -60,10 +60,11 @@
   border-bottom: solid 1px #e0d8d8;
 }
 
-.recomendation-container .recomendation-item:hover{
+.recomendation-container .recomendation-item:hover,.recomendation-item:focus{
   cursor: pointer;
   background-color: #ececec;
   color: black;
+  outline: none;
 }
 
 .test423:hover{
