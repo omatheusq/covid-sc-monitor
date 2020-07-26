@@ -1,5 +1,6 @@
-import React, { useEffect, useState, useRef, createRef } from 'react';
-import { useSelector } from "react-redux";
+import React, { useEffect, useState, useRef } from 'react';
+import { useSelector, useDispatch } from "react-redux";
+
 import { MdSearch, MdClear } from "react-icons/md";
 
 import './style.css'
@@ -9,7 +10,12 @@ function SearchBar() {
   const [recomendations, setRecomendations] = useState([]);
   const [recomendationsShown, setRecomendationsShown] = useState(true);
   const [cleanButtonShown, setCleanButtonShown] = useState(false);
+  const [selectedCity, setSelectedCity] = useState(undefined);
+  const dispatch = useDispatch()
+
   const { citiesCoordinates: cities } = useSelector(state => ({ ...state.coordinatesReducer }))
+  const { selectedCity: rootCity } = useSelector(state => ({ ...state.selectedCityReducer }))
+
   const ref = useRef();
 
   useOnClickOutside(ref, () => setRecomendationsShown(false));
@@ -39,6 +45,7 @@ function SearchBar() {
     const value = searchText;
     if (value == '') {
       setRecomendations([])
+      setSelectedCity(undefined)
     } else {
       let recomendations = cities.filter(c => {
         let cityName = c.city.toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
@@ -57,21 +64,77 @@ function SearchBar() {
     }
   }, [recomendations])
 
+  useEffect(() => {
+    if (selectedCity) {
+      dispatch({
+        type: "SET_CITY",
+        city: selectedCity
+      })
+    } else {
+      dispatch({
+        type: "DESELECT_CITY",
+        city: selectedCity
+      })
+
+    }
+
+    setRecomendationsShown(false)
+  }, [selectedCity])
+
+  useEffect(() => {
+    if(selectedCity && rootCity){
+      if(selectedCity.ibgeCode !== rootCity.ibgeCode){
+        if(rootCity.ibgeCode !== 42){
+          setCleanButtonShown(true)
+          setSelectedCity(rootCity)
+        }else{
+          setSearchText('')
+          setSelectedCity(undefined)
+        }
+      }
+    }else if(rootCity){
+        if(rootCity.ibgeCode !== 42){
+          setCleanButtonShown(true)
+          setSelectedCity(rootCity)
+        }
+    }
+  }, [rootCity])
+
+  const selectedIfHasJustOneRecomendation = ()=> {
+    if(recomendations.length === 1){
+      setSelectedCity(recomendations[0])
+    }
+  }
+
   return (
     <div ref={ref}>
-      <form className="input-container test423">
+      <form className="input-container test423" onSubmit={(e)=>{e.preventDefault(); selectedIfHasJustOneRecomendation()}}>
         <span className="input-icon">
           <MdSearch />
         </span>
-        <input
-          onChange={(e) => setSearchText(e.target.value)}
-          onFocus={(e) => setRecomendationsShown(true)}
-          placeholder="Pesquisar cidade"
-          type="text"
-          name="search"
-          id="search"
-          value={searchText}
-          autoComplete="off" />
+        {
+
+          !selectedCity
+            ? (
+              <input
+                onChange={(e) => setSearchText(e.target.value)}
+                onFocus={(e) => setRecomendationsShown(true)}
+                placeholder="Pesquisar cidade"
+                type="text"
+                name="search"
+                id="search"
+                value={searchText}
+                autoComplete="off" />
+            )
+            : (
+              <div className="selected-city-container">
+                <div className="selected-city">
+                  {selectedCity.city}
+                </div>
+              </div>
+            )
+        }
+
         <span className="input-icon">
           {cleanButtonShown && (
             <MdClear onClick={() => setSearchText('')} />
@@ -82,7 +145,13 @@ function SearchBar() {
         <div className="recomendation-container">
           {
             recomendations.map(c => (
-              <div className="recomendation-item" key={c.ibgeCode}>{c.city}</div>
+              <div
+                className="recomendation-item"
+                key={c.ibgeCode}
+                onClick={() => setSelectedCity(c)}
+              >
+                {c.city}
+              </div>
             ))
           }
         </div>

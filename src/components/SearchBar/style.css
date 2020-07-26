@@ -69,3 +69,25 @@
 .test423:hover{
   cursor: pointer;
 }
+
+.selected-city-container{
+  height: 40px;
+  width: 320px;
+  font: normal 16px Google Sans,Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+}
+
+.selected-city{
+  display: flex;
+  height: 100%;
+  align-items: center;
+  background-color: #d8ecfdab;
+  width: auto;
+  border-radius: 8px;
+  color: #5a5a5a;
+  padding: 0 21px;
+  border: solid 1px #5aa5da;
+  margin-top: -1px;
+  margin-left: 10px;
+  margin-right: 10px;
+  color: #5aa5da;
+}

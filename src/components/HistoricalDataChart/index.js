@@ -11,19 +11,19 @@ function HistoricalDataChart(props) {
 
     const ctx = canvas.getContext("2d");
     const gradient = ctx.createLinearGradient(0, 0, 0, height);
-    gradient.addColorStop(0, 'rgba(250,174,50,1)');
-    gradient.addColorStop(1, 'rgba(250,174,50,0)');
+    gradient.addColorStop(0, 'rgba(90,165,218,1)');
+    gradient.addColorStop(1, 'rgba(90,165,218,0)');
 
     let res = historicalCaseData
     if (res) {
       res.datasets = res.datasets.map(d => ({
         backgroundColor: gradient,
-        borderColor: "#ff6c23",
+        borderColor: "#5aa5da",
         borderWidth: 2,
         pointColor: "#fff",
-        pointStrokeColor: "#ff6c23",
+        pointStrokeColor: "#5aa5da",
         pointHighlightFill: "#fff",
-        pointHighlightStroke: "#ff6c23",
+        pointHighlightStroke: "#5aa5da",
         data: d.data,
         label: 'Casos'
       }))
