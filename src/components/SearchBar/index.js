@@ -70,10 +70,10 @@ function SearchBar() {
         type: "SET_CITY",
         city: selectedCity
       })
+      setSearchText(selectedCity.city)
     } else {
       dispatch({
-        type: "DESELECT_CITY",
-        city: selectedCity
+        type: "DESELECT_CITY"
       })
 
     }
@@ -135,9 +135,9 @@ function SearchBar() {
             )
         }
 
-        <span className="input-icon">
+        <span className="input-icon" onClick={() => setSearchText('')}>
           {cleanButtonShown && (
-            <MdClear onClick={() => setSearchText('')} />
+            <MdClear />
           )}
         </span>
       </form>
