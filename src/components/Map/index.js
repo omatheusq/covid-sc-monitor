@@ -33,13 +33,14 @@ export default function Map() {
   }, [selectedCity]);
 
   useEffect(() => {
-    let maxValue = d3.max(covidData.filter(d => d.cityIbgeCode != '42').map(d => parseFloat(d.caseCount)))
+    let maxValue = d3.max(covidData.filter(d => d.cityIbgeCode != '42').map(d => parseFloat(d.confirmedPer100k)))
     if (isNaN(maxValue) === false) {
       citiesCoordinates.forEach(c => {
         let data = covidData.find(d => d.cityIbgeCode == c.ibgeCode)
         if (data) {
           c.caseCount = parseInt(data.caseCount);
           c.deathCount = parseInt(data.deathCount);
+          c.confirmedPer100k = parseFloat(data.confirmedPer100k);
         } else {
           c.caseCount = 0;
           c.deathCount = 0;
@@ -117,6 +118,8 @@ export default function Map() {
 
     let cities = topojson.feature(data, data.objects['42']).features;
 
+    console.log(citiesCodinates)
+
     svg.selectAll('.city')
       .data(cities)
       .enter().append('path')
@@ -151,7 +154,7 @@ export default function Map() {
         var coords = projection([c.latLng.lng, c.latLng.lat]);
         return coords[1]
       })
-      .attr("r", d => { return radiusScale(d.caseCount) })
+      .attr("r", d => { return radiusScale(d.confirmedPer100k) })
       .on('click', function (d) {
         let city = citiesCodinates.find(c => c.ibgeCode === d.ibgeCode)
         setSelectedCity(city)
